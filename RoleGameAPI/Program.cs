@@ -1,4 +1,4 @@
-//global using RoleGameAPI.Models;
+global using RoleGameAPI.Models;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.

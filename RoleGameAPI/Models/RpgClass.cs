@@ -7,6 +7,7 @@ namespace RoleGameAPI.Models
     {
         Knight=1,
         Mage=2,
-        Rogue=3
+        Rogue=3,
+        Orc=4
     }
 }
