@@ -1,4 +1,5 @@
 ﻿global using AutoMapper;
+using RoleGameAPI.Data;
 
 namespace RoleGameAPI.Services.CharacterService
 {
@@ -10,10 +11,12 @@ namespace RoleGameAPI.Services.CharacterService
             new Character(){ Id=1,Name="Trall", Class=RpgClass.Orc}
         };
         private readonly IMapper _mapper;
+        private readonly DataContext _context;
 
-        public CharacterService(IMapper mapper)
+        public CharacterService(IMapper mapper, DataContext context)
         {
             _mapper = mapper;
+            _context = context;
         }
         public async Task<ServiceResponse<List<GetCharacterDto>>> AddCharacter(AddCharacterDto newCharacter)
         {
@@ -30,7 +33,8 @@ namespace RoleGameAPI.Services.CharacterService
         public async Task<ServiceResponse<List<GetCharacterDto>>> GetAllCharacters()
         {
             var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
-            serviceResponse.Data = characters.Select(c => _mapper.Map<GetCharacterDto>(c)).ToList();
+            var dbCharacters = await _context.Characters.ToListAsync();
+            serviceResponse.Data = dbCharacters.Select(c => _mapper.Map<GetCharacterDto>(c)).ToList();
 
             return serviceResponse;
         }
@@ -39,8 +43,8 @@ namespace RoleGameAPI.Services.CharacterService
         {
             var serviceResponse = new ServiceResponse<GetCharacterDto>();
 
-            var character = characters.FirstOrDefault(c => c.Id == id);
-            serviceResponse.Data = _mapper.Map<GetCharacterDto>(character);
+            var dbCharacter = await _context.Characters.FirstOrDefaultAsync(c => c.Id == id);
+            serviceResponse.Data = _mapper.Map<GetCharacterDto>(dbCharacter);
             return serviceResponse;
 
         }
