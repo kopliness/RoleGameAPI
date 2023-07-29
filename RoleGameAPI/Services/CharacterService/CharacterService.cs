@@ -9,21 +9,24 @@ namespace RoleGameAPI.Services.CharacterService
             new Character(),
             new Character(){ Id=1,Name="Trall", Class=RpgClass.Orc}
         };
-        public List<Character> AddCharacter(Character newCharacter)
+        public async Task<List<Character>> AddCharacter(Character newCharacter)
         {
             characters.Add(newCharacter);
             return characters;
         }
 
 
-        public List<Character> GetAllCharacters()
+        public async Task<List<Character>> GetAllCharacters()
         {
             return characters;
         }
 
-        public Character GetCharacterById(int id)
+        public async Task<Character> GetCharacterById(int id)
         {
-            return characters.FirstOrDefault(c => c.Id == id);
+            var character = characters.FirstOrDefault(c => c.Id == id);
+            if(character is not null) 
+                return character;
+            throw new Exception("Character is not found");
         }
     }
 }
